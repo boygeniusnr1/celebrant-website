@@ -1,0 +1,268 @@
+---
+const images = [
+  { src: '/images/wedding1.jpg', alt: 'Wedding Photo 1' },
+  { src: '/images/celebration.jpg', alt: 'Celebration Photo' },
+  { src: '/images/wedding2.jpg', alt: 'Wedding Photo 2' },
+  { src: '/images/memorial.jpg', alt: 'Memorial Service' },
+  { src: '/images/birthday.jpg', alt: 'Birthday Ceremony' },
+  { src: '/images/wedding3.jpg', alt: 'Wedding Photo 3' },
+];
+---
+
+<section id="gallery" class="gallery">
+  <div class="container">
+    <h2>Gallery</h2>
+    <div class="gallery-grid">
+      {images.map((image, index) => (
+        <div class="gallery-item" data-index={index}>
+          <img src={image.src} alt={image.alt} loading="lazy" />
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Lightbox Modal -->
+  <div id="lightbox" class="lightbox">
+    <button class="close-btn">&times;</button>
+    <button class="nav-btn prev-btn">&#10094;</button>
+    <button class="nav-btn next-btn">&#10095;</button>
+    <div class="lightbox-content">
+      <img id="lightbox-img" src="" alt="" />
+      <div class="image-counter">
+        <span id="current-image">1</span> / <span id="total-images">{images.length}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .gallery {
+    background: #f9f9f9;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: #3fafc3;
+    font-size: 2.5rem;
+    font-weight: 500;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .gallery-item {
+    aspect-ratio: 4/3;
+    background: #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+
+  .gallery-item:hover {
+    transform: scale(1.05);
+  }
+
+  .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Lightbox Styles */
+  .lightbox {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .lightbox.active {
+    display: flex;
+  }
+
+  .lightbox-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #lightbox-img {
+    max-width: 100%;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: 4px;
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    font-size: 50px;
+    color: white;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 1001;
+    font-weight: 300;
+    transition: opacity 0.3s;
+  }
+
+  .close-btn:hover {
+    opacity: 0.7;
+  }
+
+  .nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 40px;
+    color: white;
+    background: rgba(102, 126, 234, 0.8);
+    border: none;
+    cursor: pointer;
+    padding: 20px;
+    border-radius: 4px;
+    transition: background 0.3s;
+    font-weight: 300;
+  }
+
+  .nav-btn:hover {
+    background: rgba(63, 175, 195, 1);
+  }
+
+  .prev-btn {
+    left: 20px;
+  }
+
+  .next-btn {
+    right: 20px;
+  }
+
+  .image-counter {
+    color: white;
+    font-size: 1.2rem;
+    margin-top: 1rem;
+    font-weight: 300;
+  }
+
+  @media (max-width: 768px) {
+    .nav-btn {
+      font-size: 30px;
+      padding: 15px;
+    }
+
+    .prev-btn {
+      left: 10px;
+    }
+
+    .next-btn {
+      right: 10px;
+    }
+
+    .close-btn {
+      top: 10px;
+      right: 20px;
+      font-size: 40px;
+    }
+  }
+</style>
+
+<script>
+  const images = [
+    { src: '/images/wedding1.jpg', alt: 'Wedding Photo 1' },
+    { src: '/images/celebration.jpg', alt: 'Celebration Photo' },
+    { src: '/images/wedding2.jpg', alt: 'Wedding Photo 2' },
+    { src: '/images/memorial.jpg', alt: 'Memorial Service' },
+    { src: '/images/birthday.jpg', alt: 'Birthday Ceremony' },
+    { src: '/images/wedding3.jpg', alt: 'Wedding Photo 3' },
+  ];
+
+  let currentIndex = 0;
+
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const currentImageSpan = document.getElementById('current-image');
+  const closeBtn = document.querySelector('.close-btn');
+  const prevBtn = document.querySelector('.prev-btn');
+  const nextBtn = document.querySelector('.next-btn');
+  const galleryItems = document.querySelectorAll('.gallery-item');
+
+  function openLightbox(index: number) {
+    currentIndex = index;
+    updateLightboxImage();
+    lightbox?.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox?.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function updateLightboxImage() {
+    if (lightboxImg && currentImageSpan) {
+      lightboxImg.src = images[currentIndex].src;
+      lightboxImg.alt = images[currentIndex].alt;
+      currentImageSpan.textContent = (currentIndex + 1).toString();
+    }
+  }
+
+  function showNext() {
+    currentIndex = (currentIndex + 1) % images.length;
+    updateLightboxImage();
+  }
+
+  function showPrev() {
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    updateLightboxImage();
+  }
+
+  // Event listeners
+  galleryItems.forEach((item) => {
+    item.addEventListener('click', () => {
+      const index = parseInt(item.getAttribute('data-index') || '0');
+      openLightbox(index);
+    });
+  });
+
+  closeBtn?.addEventListener('click', closeLightbox);
+  nextBtn?.addEventListener('click', showNext);
+  prevBtn?.addEventListener('click', showPrev);
+
+  // Close on background click
+  lightbox?.addEventListener('click', (e) => {
+    if (e.target === lightbox) {
+      closeLightbox();
+    }
+  });
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox?.classList.contains('active')) return;
+    
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowRight') showNext();
+    if (e.key === 'ArrowLeft') showPrev();
+  });
+</script>
