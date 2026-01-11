@@ -2,13 +2,13 @@
    COLOR CONFIGURATION
    ============================================ */
 :root {
-  --primary-color: #3fafc3;
+  --primary-color: #ff0088;
   --text-dark: #333;
   --text-light: #ffffff;
   --background-light: #f9f9f9;
   --background-dark: #333;
   --card-shadow: rgba(0, 0, 0, 0.1);
-  --glow-color: rgba(63, 175, 195, 0.4);
+  --glow-color: rgba(255, 0, 136, 0.4);
 }
 
 /* ============================================
@@ -29,7 +29,7 @@ body {
     sans-serif;
   line-height: 1.6;
   color: var(--text-dark);
-  overflow-x: hidden; /* Prevents horizontal scroll from parallax */
+  overflow-x: hidden;
 }
 
 section {
@@ -47,15 +47,38 @@ header {
   width: 90%;
   max-width: 1100px;
   z-index: 1000;
-  background: rgba(63, 175, 195, 0.9);
+  background: rgba(255, 0, 136, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   -webkit-font-smoothing: antialiased;
   transform: translateZ(0);
   color: var(--text-light);
   padding: 0.8rem 0;
-  border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  border-radius: 50px;
+  box-shadow: 0 8px 32px var(--card-shadow), 0 0 15px rgba(255, 0, 136, 0.1);
+
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0); /* Forces the GPU to handle the blur calculation */
+  backface-visibility: hidden;
+}
+
+header:hover {
+  /* Intensify the pink glow and the blur */
+  border-color: var(--primary-color);
+  box-shadow: 0 10px 40px var(--glow-color);
+  background: rgba(255, 0, 136, 0.35); /* Slightly more pink on hover */
+  transform: translateY(-2px); /* Subtle lift effect */
+}
+
+header:hover nav a {
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+header:hover nav h1 {
+  text-shadow: 0 0 12px var(--glow-color);
 }
 
 nav {
@@ -78,7 +101,6 @@ nav ul {
   list-style: none;
 }
 
-/* Navbar Link Hover Animation */
 nav a {
   color: var(--text-light);
   text-decoration: none;
@@ -106,7 +128,7 @@ nav a:hover::after {
 }
 
 /* ============================================
-   MENU TOGGLE
+   MENU TOGGLE (Perfect X Animation)
    ============================================ */
 .menu-toggle {
   display: none;
@@ -114,7 +136,6 @@ nav a:hover::after {
   border: none;
   color: var(--text-light);
   cursor: pointer;
-  padding: 0;
   width: 44px;
   height: 44px;
 }
@@ -132,59 +153,64 @@ nav a:hover::after {
 }
 
 /* ============================================
-   HERO STYLES (With Parallax)
+   HERO STYLES (Restored & Bold)
    ============================================ */
 .hero {
   position: relative;
-  height: 80vh; /* Adjust height as needed */
+  height: 85vh;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
-  color: var(--text-light);
   text-align: center;
-  padding: 0 2rem;
-}
-
-/* This creates the Parallax effect */
-.hero::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+  color: var(--text-light);
+  /* Use the image directly on the section for better reliability */
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(255, 0, 136, 0.2)),
     url("/images/hero-background.jpg");
   background-size: cover;
   background-position: center;
-  background-attachment: fixed; /* The secret for pure CSS parallax */
-  z-index: -1;
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* Keep parallax for desktop */
 }
 
 .hero h2 {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  font-weight: 500;
+  /* Enormous, bold text */
+  font-size: clamp(3.5rem, 12vw, 6rem);
+  font-weight: 800;
+  line-height: 1.1;
+  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  max-width: 1000px;
+  padding: 0 2rem;
+  z-index: 2;
 }
 
-.hero p {
-  font-size: 1.3rem;
-  max-width: 600px;
-  margin: 0 auto;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-  font-weight: 300;
+/* Fix for mobile - 'fixed' attachment breaks on many mobile browsers */
+@media (max-width: 768px) {
+  .hero {
+    background-attachment: scroll;
+    height: 70vh; /* Shorter hero on mobile feels better */
+  }
+  .hero h2 {
+    font-size: clamp(2.5rem, 15vw, 4rem);
+  }
 }
 
 /* ============================================
-   SERVICES STYLES
+   SERVICES STYLES (Full Width Fix)
    ============================================ */
 .services-section {
+  width: 100%;
+  background-color: var(--background-light); /* Fills entire screen width */
+  padding: 8rem 0;
+  position: relative;
+  z-index: 1; /* Helps fix the header blur issue */
+}
+
+.services-section .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 8rem 2rem;
+  padding: 0 2rem;
 }
 
 .services-section h2 {
@@ -192,23 +218,21 @@ nav a:hover::after {
   margin-bottom: 3rem;
   color: var(--primary-color);
   font-size: 2.5rem;
-  font-weight: 500;
 }
 
 .services {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
-  margin-top: 2rem;
 }
 
+/* Service Card styling remains the same */
 .service-card {
   background: var(--text-light);
   padding: 2.5rem;
   border-radius: 15px;
   box-shadow: 0 4px 6px var(--card-shadow);
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-    box-shadow 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   border: 1px solid transparent;
 }
 
@@ -218,24 +242,48 @@ nav a:hover::after {
   box-shadow: 0 10px 30px var(--glow-color);
 }
 
-.service-card h3 {
+/* ============================================
+   SERVICE ICON STYLES
+   ============================================ */
+.service-icon {
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 0, 136, 0.1); /* Soft pink background */
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
   color: var(--primary-color);
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
-  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.service-icon svg {
+  width: 32px;
+  height: 32px;
+}
+
+/* Animate icon when the card is hovered */
+.service-card:hover .service-icon {
+  background: var(--primary-color);
+  color: white;
+  transform: rotate(-10deg) scale(1.1);
+  box-shadow: 0 0 15px var(--glow-color);
 }
 
 /* ============================================
-   GALLERY STYLES
+   GALLERY STYLES (Fixed Class Names)
    ============================================ */
 .gallery {
   background: var(--background-light);
+  width: 100%;
 }
 
-.gallery-container {
+/* Changed from .gallery-container to .container to match your Astro HTML */
+.gallery .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 4rem 2rem;
+  padding: 0 2rem; /* Side padding for the grid */
 }
 
 .gallery h2 {
@@ -243,55 +291,148 @@ nav a:hover::after {
   margin-bottom: 3rem;
   color: var(--primary-color);
   font-size: 2.5rem;
-  font-weight: 500;
 }
 
 .gallery-grid {
   display: grid;
+  /* Fixed column logic to prevent 1x6 layout */
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
+  width: 100%;
 }
 
+/* ============================================
+   GALLERY ITEM (Lift + Zoom Effect)
+   ============================================ */
 .gallery-item {
   aspect-ratio: 4/3;
-  background: #e0e0e0;
+  background: #eee;
   border-radius: 12px;
-  overflow: hidden;
-  position: relative;
+  overflow: hidden; /* Essential for the inner zoom effect */
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
   border: 2px solid transparent;
+  position: relative;
+
+  /* Initial Reveal State */
+  opacity: 0;
+  transform: translateY(30px);
+
+  /* Separate transitions for Reveal (slow) and Hover (fast) */
+  transition: opacity 0.6s ease-out,
+    transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
 }
 
-/* Gallery Hover Glow */
+.gallery-item.reveal {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 1. Lift the whole card up on hover */
 .gallery-item:hover {
-  transform: scale(1.03);
+  transform: translateY(-10px); /* Matches service-card lift */
   border-color: var(--primary-color);
-  box-shadow: 0 10px 25px var(--glow-color);
+  box-shadow: 0 10px 30px var(--glow-color);
 }
 
+/* 2. Zoom the image inside on hover */
 .gallery-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease; /* Smooth slow zoom */
 }
 
-/* ... Lightbox, Contact, and Footer styles remain consistent ... */
+.gallery-item:hover img {
+  transform: scale(1.1); /* The zoom effect */
+}
+
+/* Lightbox Counter Styling */
+.image-counter {
+  color: var(--text-light);
+  margin-top: 15px;
+  font-family: sans-serif;
+  font-weight: 300;
+  background: rgba(255, 0, 136, 0.2);
+  padding: 5px 20px;
+  border-radius: 50px;
+  border: 1px solid var(--primary-color);
+  backdrop-filter: blur(5px);
+}
+
+/* ============================================
+   LIGHTBOX STYLES (Themed Buttons)
+   ============================================ */
+
 .lightbox {
   display: none;
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.95);
-  z-index: 1000;
+  inset: 0;
+  /* Semi-transparent dark overlay */
+  background: rgba(0, 0, 0, 0.6);
+
+  /* The Blur Effect */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  z-index: 2000;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+
+  /* Smoothly fade in the blur */
+  transition: opacity 0.4s ease;
 }
+
 .lightbox.active {
   display: flex;
 }
+
+/* Ensure the image stays sharp and clear above the blur */
+.lightbox-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2001;
+}
+
+.lightbox-content img {
+  max-width: 90%;
+  max-height: 80vh;
+  border-radius: 8px;
+  /* Stronger shadow to pop against the blurred background */
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--primary-color);
+  color: var(--text-light);
+  border: none;
+  padding: 1.5rem;
+  cursor: pointer;
+  border-radius: 10px;
+  font-size: 24px;
+  transition: all 0.3s ease;
+  z-index: 2001;
+}
+
+.nav-btn:hover {
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 0 20px var(--glow-color);
+}
+
+.prev-btn {
+  left: 30px;
+}
+.next-btn {
+  right: 30px;
+}
+
 .close-btn {
   position: absolute;
   top: 20px;
@@ -301,18 +442,125 @@ nav a:hover::after {
   background: none;
   border: none;
   cursor: pointer;
+  z-index: 2002;
+  text-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Helps white X stand out over blur */
 }
+
+.close-btn:hover {
+  color: var(--primary-color);
+}
+
+/* ============================================
+   CONTACT & FOOTER
+   ============================================ */
 .contact {
   background: var(--primary-color);
   color: var(--text-light);
   text-align: center;
-  padding: 4rem 2rem;
+  padding: 8rem 2rem;
 }
+
 footer {
   background: var(--background-dark);
   color: var(--text-light);
   text-align: center;
-  padding: 2rem;
+  padding: 3rem;
+}
+
+/* ============================================
+   GLASS FOOTER STYLES
+   ============================================ */
+.glass-footer {
+  background: var(--background-dark);
+  color: var(--text-light);
+  padding: 4rem 0 2rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 3rem;
+  margin-bottom: 2rem;
+}
+
+.footer-brand h3 {
+  font-size: 1.8rem;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.footer-socials {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.footer-socials a {
+  color: var(--text-light);
+  text-decoration: none;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.footer-socials a:hover {
+  background: var(--primary-color);
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px var(--glow-color);
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+/* Back to Top Button (Glass Style) */
+.back-to-top {
+  background: rgba(255, 0, 136, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-to-top:hover {
+  background: var(--primary-color);
+  transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 2rem;
+  }
 }
 
 /* ============================================
@@ -321,13 +569,13 @@ footer {
 @media (max-width: 768px) {
   .hero::before {
     background-attachment: scroll;
-  } /* Parallax usually looks jittery on mobile */
-
+  }
   .menu-toggle {
     display: flex;
     align-items: center;
     justify-content: center;
   }
+
   .active-toggle .line-top {
     transform: translateY(0) rotate(45deg);
   }
@@ -343,16 +591,17 @@ footer {
     display: flex;
     flex-direction: column;
     position: absolute;
-    top: 70px;
+    top: 75px;
     left: 0;
     right: 0;
-    background: rgba(63, 175, 195, 0.98);
-    padding: 2rem;
-    border-radius: 20px;
+    background: var(--primary-color);
+    padding: 2.5rem;
+    border-radius: 25px;
     opacity: 0;
     visibility: hidden;
     transform: translateY(-20px);
     transition: all 0.3s ease-in-out;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
   }
 
   nav ul.active {
@@ -360,4 +609,14 @@ footer {
     visibility: visible;
     transform: translateY(0);
   }
+
+  /* Mobile Grid adjustment */
+  .gallery-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+  .nav-btn {
+    padding: 1rem;
+    font-size: 18px;
+    display: none;
+  } /* Hide nav buttons on mobile to prevent overlap */
 }
