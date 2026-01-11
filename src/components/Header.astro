@@ -1,11 +1,66 @@
 <header>
   <nav>
-    <h1>Paula Palmer, Celebrant</h1>
-    <ul>
-      <li><a href="#home">Home</a></li>
+    <h1>Logo</h1>
+
+    <button class="menu-toggle" aria-label="Toggle Menu">
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          class="line-top"
+          d="M4 12H20"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"></path>
+        <path
+          class="line-mid"
+          d="M4 12H20"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"></path>
+        <path
+          class="line-bot"
+          d="M4 12H20"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"></path>
+      </svg>
+    </button>
+
+    <ul id="nav-links">
+      <li><a href="#hero">Home</a></li>
       <li><a href="#services">Services</a></li>
       <li><a href="#gallery">Gallery</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
   </nav>
 </header>
+
+<script>
+  const setupMenu = () => {
+    const menuToggle = document.querySelector(".menu-toggle");
+    const navLinks = document.querySelector("#nav-links");
+
+    if (menuToggle && navLinks) {
+      menuToggle.addEventListener("click", () => {
+        navLinks.classList.toggle("active");
+        // This class triggers the SVG line animation
+        menuToggle.classList.toggle("active-toggle");
+      });
+
+      document.querySelectorAll("#nav-links a").forEach((link) => {
+        link.addEventListener("click", () => {
+          navLinks.classList.remove("active");
+          menuToggle.classList.remove("active-toggle");
+        });
+      });
+    }
+  };
+
+  setupMenu();
+  document.addEventListener("astro:after-swap", setupMenu);
+</script>
