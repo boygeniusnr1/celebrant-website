@@ -3,12 +3,12 @@
    Change these hex values to customize your site colors
    ============================================ */
 :root {
-  --primary-color: #3fafc3;      /* Main purple - used for header, buttons, accents */
-  --text-dark: #333;             /* Main text color */
-  --text-light: #ffffff;         /* Light text (on dark backgrounds) */
-  --background-light: #f9f9f9;   /* Light background sections */
-  --background-dark: #333;       /* Footer background */
-  --card-shadow: rgba(0,0,0,0.1); /* Shadow for cards */
+  --primary-color: #3fafc3; /* Main purple - used for header, buttons, accents */
+  --text-dark: #333; /* Main text color */
+  --text-light: #ffffff; /* Light text (on dark backgrounds) */
+  --background-light: #f9f9f9; /* Light background sections */
+  --background-dark: #333; /* Footer background */
+  --card-shadow: rgba(0, 0, 0, 0.1); /* Shadow for cards */
 }
 
 /* ============================================
@@ -25,22 +25,37 @@ html {
 }
 
 body {
-  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
   line-height: 1.6;
   color: var(--text-dark);
 }
 
+section {
+  padding: 10rem 0;
+}
 /* ============================================
    HEADER STYLES
    ============================================ */
 header {
+  /* Positioning */
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+
+  /* Floating Appearance */
+  width: 90%;
+  max-width: 1100px;
   background: var(--primary-color);
   color: var(--text-light);
-  padding: 2rem 0;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: 0 2px 10px var(--card-shadow);
+  padding: 1rem 0; /* Reduced padding for a sleeker look */
+  border-radius: 20px; /* Rounded pill shape */
+
+  /* Glassmorphism/Shadow Effect */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(3px); /* Optional: adds a modern feel */
 }
 
 nav {
@@ -54,7 +69,7 @@ nav {
 
 nav h1 {
   font-size: 1.8rem;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 nav ul {
@@ -78,19 +93,19 @@ nav a:hover {
    HERO STYLES
    ============================================ */
 .hero {
-  background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
-              url('/images/hero-background.jpg');
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+    url("/images/hero-background.jpg");
   background-size: cover;
   background-position: center;
   color: var(--text-light);
   text-align: center;
-  padding: 8rem 2rem;
+  padding: 20rem 2rem;
 }
 
 .hero h2 {
   font-size: 3rem;
   margin-bottom: 1rem;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   font-weight: 500;
 }
 
@@ -98,7 +113,7 @@ nav a:hover {
   font-size: 1.3rem;
   max-width: 600px;
   margin: 0 auto;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
   font-weight: 300;
 }
 
@@ -108,7 +123,7 @@ nav a:hover {
 .services-section {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 4rem 2rem;
+  padding: 8rem 2rem;
 }
 
 .services-section h2 {
@@ -136,7 +151,7 @@ nav a:hover {
 
 .service-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
 }
 
 .service-card h3 {
