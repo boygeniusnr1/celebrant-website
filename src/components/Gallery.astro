@@ -1,11 +1,21 @@
 ---
+import { Image } from "astro:assets";
+
+// Import local images from your src/assets folder
+import wedding1 from "../assets/images/wedding1.jpg";
+import celebration from "../assets/images/celebration.jpg";
+import wedding2 from "../assets/images/wedding2.jpg";
+import memorial from "../assets/images/memorial.jpg";
+import birthday from "../assets/images/birthday.jpg";
+import wedding3 from "../assets/images/wedding3.jpg";
+
 const images = [
-  { src: "/images/wedding1.jpg", alt: "Wedding Photo 1" },
-  { src: "/images/celebration.jpg", alt: "Celebration Photo" },
-  { src: "/images/wedding2.jpg", alt: "Wedding Photo 2" },
-  { src: "/images/memorial.jpg", alt: "Memorial Service" },
-  { src: "/images/birthday.jpg", alt: "Birthday Ceremony" },
-  { src: "/images/wedding3.jpg", alt: "Wedding Photo 3" },
+  { src: wedding1, alt: "Wedding 1" },
+  { src: celebration, alt: "Celebration" },
+  { src: wedding2, alt: "Wedding 2" },
+  { src: memorial, alt: "Memorial Service" },
+  { src: birthday, alt: "Birthday Ceremony" },
+  { src: wedding3, alt: "Wedding 3" },
 ];
 ---
 
@@ -15,20 +25,40 @@ const images = [
     <div class="gallery-grid">
       {
         images.map((image, index) => (
-          <div class="gallery-item" data-index={index}>
-            <img src={image.src} alt={image.alt} loading="lazy" />
+          <div
+            class={`gallery-item ${index >= 6 ? "hidden-item" : ""}`}
+            data-index={index}
+            data-full={image.src.src}
+          >
+            <Image
+              src={image.src}
+              alt={image.alt}
+              width={600}
+              height={450}
+              format="webp"
+            />
           </div>
         ))
       }
     </div>
-  </div>
 
-  <!-- Lightbox Modal -->
+    {
+      images.length > 6 && (
+        <div class="show-more-container">
+          <button id="show-more-btn" class="cta-button magnetic">
+            Show More
+          </button>
+        </div>
+      )
+    }
+  </div>
   <div id="lightbox" class="lightbox">
     <button class="close-btn">&times;</button>
     <button class="nav-btn prev-btn">&#10094;</button>
     <button class="nav-btn next-btn">&#10095;</button>
     <div class="lightbox-content">
+      <div id="lightbox-loader" class="loader"></div>
+
       <img id="lightbox-img" src="" alt="" />
       <div class="image-counter">
         <span id="current-image">1</span> / <span id="total-images"
@@ -40,54 +70,41 @@ const images = [
 </section>
 
 <script>
-  const images = [
-    { src: "/images/wedding1.jpg", alt: "Wedding Photo 1" },
-    { src: "/images/celebration.jpg", alt: "Celebration Photo" },
-    { src: "/images/wedding2.jpg", alt: "Wedding Photo 2" },
-    { src: "/images/memorial.jpg", alt: "Memorial Service" },
-    { src: "/images/birthday.jpg", alt: "Birthday Ceremony" },
-    { src: "/images/wedding3.jpg", alt: "Wedding Photo 3" },
-  ];
-
   let currentIndex = 0;
   let touchStartX = 0;
   let touchEndX = 0;
 
-  // Select elements once
   const lightbox = document.getElementById("lightbox");
   const lightboxImg = document.getElementById(
-    "lightbox-img"
+    "lightbox-img",
   ) as HTMLImageElement;
   const currentImageSpan = document.getElementById("current-image");
-  const closeBtn = document.querySelector(".close-btn");
-  const prevBtn = document.querySelector(".prev-btn");
-  const nextBtn = document.querySelector(".next-btn");
   const galleryItems = document.querySelectorAll(".gallery-item");
 
-  // --- REVEAL ON SCROLL LOGIC ---
-  const revealObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("reveal");
-          revealObserver.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.1 }
-  );
-
-  galleryItems.forEach((item, index) => {
-    (item as HTMLElement).style.transitionDelay = `${(index % 3) * 0.1}s`;
-    revealObserver.observe(item);
-  });
+  // Create an array of image data by pulling from the optimized DOM attributes
+  const imageData = Array.from(galleryItems).map((item) => ({
+    src: item.getAttribute("data-full"),
+    alt: item.querySelector("img")?.getAttribute("alt"),
+  }));
 
   // --- LIGHTBOX FUNCTIONS ---
+  const loader = document.getElementById("lightbox-loader");
+
   function updateLightboxImage() {
     if (lightboxImg && currentImageSpan) {
-      lightboxImg.src = images[currentIndex].src;
-      lightboxImg.alt = images[currentIndex].alt;
+      const data = imageData[currentIndex];
+
+      // 1. Start loading state
+      lightbox?.classList.add("loading");
+
+      lightboxImg.src = data.src || "";
+      lightboxImg.alt = data.alt || "";
       currentImageSpan.textContent = (currentIndex + 1).toString();
+
+      // 2. Turn off loading state once image is ready
+      lightboxImg.onload = () => {
+        lightbox?.classList.remove("loading");
+      };
     }
   }
 
@@ -104,49 +121,60 @@ const images = [
   }
 
   function showNext() {
-    currentIndex = (currentIndex + 1) % images.length;
+    currentIndex = (currentIndex + 1) % imageData.length;
     updateLightboxImage();
   }
 
   function showPrev() {
-    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    currentIndex = (currentIndex - 1 + imageData.length) % imageData.length;
     updateLightboxImage();
   }
 
-  // --- SWIPE GESTURE LOGIC ---
-  function handleGesture() {
-    const swipeThreshold = 50;
-    if (touchEndX < touchStartX - swipeThreshold) showNext();
-    if (touchEndX > touchStartX + swipeThreshold) showPrev();
-  }
+  // --- REVEAL ON SCROLL LOGIC ---
+  const revealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("reveal");
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.1 },
+  );
 
-  // --- EVENT LISTENERS ---
-  galleryItems.forEach((item) => {
-    item.addEventListener("click", () => {
-      const index = parseInt(item.getAttribute("data-index") || "0");
-      openLightbox(index);
-    });
+  galleryItems.forEach((item, index) => {
+    (item as HTMLElement).style.transitionDelay = `${(index % 3) * 0.1}s`;
+    revealObserver.observe(item);
+
+    // Add click listener
+    item.addEventListener("click", () => openLightbox(index));
   });
 
-  closeBtn?.addEventListener("click", closeLightbox);
-  nextBtn?.addEventListener("click", showNext);
-  prevBtn?.addEventListener("click", showPrev);
+  // --- EVENT LISTENERS ---
+  document
+    .querySelector(".close-btn")
+    ?.addEventListener("click", closeLightbox);
+  document.querySelector(".next-btn")?.addEventListener("click", showNext);
+  document.querySelector(".prev-btn")?.addEventListener("click", showPrev);
 
   lightbox?.addEventListener(
     "touchstart",
-    (e: TouchEvent) => {
+    (e: any) => {
       touchStartX = e.changedTouches[0].screenX;
     },
-    { passive: true }
+    { passive: true },
   );
 
   lightbox?.addEventListener(
     "touchend",
-    (e: TouchEvent) => {
+    (e: any) => {
       touchEndX = e.changedTouches[0].screenX;
-      handleGesture();
+      const swipeThreshold = 50;
+      if (touchEndX < touchStartX - swipeThreshold) showNext();
+      if (touchEndX > touchStartX + swipeThreshold) showPrev();
     },
-    { passive: true }
+    { passive: true },
   );
 
   lightbox?.addEventListener("click", (e) => {
@@ -159,4 +187,27 @@ const images = [
     if (e.key === "ArrowRight") showNext();
     if (e.key === "ArrowLeft") showPrev();
   });
+
+  // --- SHOW MORE LOGIC ---
+  const showMoreBtn = document.getElementById("show-more-btn");
+  const hiddenItems = document.querySelectorAll(".hidden-item");
+
+  if (showMoreBtn) {
+    showMoreBtn.addEventListener("click", () => {
+      hiddenItems.forEach((item, index) => {
+        // Remove hidden class and add display/animation classes
+        item.classList.remove("hidden-item");
+        item.classList.add("show");
+
+        // Apply the same stagger delay we used for the initial reveal
+        (item as HTMLElement).style.transitionDelay = `${(index % 3) * 0.1}s`;
+
+        // Trigger the reveal observer manually for these new items
+        item.classList.add("reveal");
+      });
+
+      // Hide the button after all images are shown
+      showMoreBtn.style.display = "none";
+    });
+  }
 </script>

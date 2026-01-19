@@ -25,7 +25,11 @@ html {
 }
 
 body {
-  font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI",
+  font-family:
+    "Roboto",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
     sans-serif;
   line-height: 1.6;
   color: var(--text-dark);
@@ -34,6 +38,24 @@ body {
 
 section {
   padding: 10rem 0;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+  /* For older browser support */
+  max-width: 800px;
+  margin-inline: auto;
+}
+
+.footer-socials a,
+.back-to-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1); /* Essential for a "snappy" snap-back */
+  will-change: transform;
 }
 
 /* ============================================
@@ -54,8 +76,10 @@ header {
   transform: translateZ(0);
   color: var(--text-light);
   padding: 0.8rem 0;
-  border-radius: 50px;
-  box-shadow: 0 8px 32px var(--card-shadow), 0 0 15px rgba(255, 0, 136, 0.1);
+  border-radius: 25px;
+  box-shadow:
+    0 8px 32px var(--card-shadow),
+    0 0 15px rgba(255, 0, 136, 0.1);
 
   border: 1px solid rgba(255, 255, 255, 0.2);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -93,6 +117,7 @@ nav {
 nav h1 {
   font-size: 1.8rem;
   font-weight: 400;
+  margin-inline: unset;
 }
 
 nav ul {
@@ -141,7 +166,9 @@ nav a:hover::after {
 }
 
 .menu-toggle path {
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s;
+  transition:
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.2s;
   transform-origin: center;
 }
 
@@ -166,8 +193,11 @@ nav a:hover::after {
   text-align: center;
   color: var(--text-light);
   /* Use the image directly on the section for better reliability */
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(255, 0, 136, 0.2)),
-    url("/images/hero-background.jpg");
+  background:
+    radial-gradient(at 0% 0%, rgba(255, 0, 136, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(255, 0, 136, 0.1) 0px, transparent 50%),
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3)),
+    url("../assets/hero-background.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -274,6 +304,33 @@ nav a:hover::after {
 /* ============================================
    GALLERY STYLES (Fixed Class Names)
    ============================================ */
+
+.hidden-item {
+  display: none;
+}
+
+.show-more-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 4rem;
+}
+
+/* Ensure the revealed items still animate in nicely */
+.gallery-item.reveal.show {
+  display: block;
+  animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 .gallery {
   background: var(--background-light);
   width: 100%;
@@ -318,8 +375,10 @@ nav a:hover::after {
   transform: translateY(30px);
 
   /* Separate transitions for Reveal (slow) and Hover (fast) */
-  transition: opacity 0.6s ease-out,
-    transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    box-shadow 0.3s ease;
 }
 
 .gallery-item.reveal {
@@ -365,45 +424,36 @@ nav a:hover::after {
    ============================================ */
 
 .lightbox {
-  display: none;
+  display: none; /* Hidden by default */
   position: fixed;
   inset: 0;
-  /* Semi-transparent dark overlay */
-  background: rgba(0, 0, 0, 0.6);
-
-  /* The Blur Effect */
+  background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-
-  z-index: 2000;
+  z-index: 9999; /* Ensure this is the highest number on your page */
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-
-  /* Smoothly fade in the blur */
-  transition: opacity 0.4s ease;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
+/* When this class is added via JS, the lightbox appears */
 .lightbox.active {
   display: flex;
+  opacity: 1;
 }
 
-/* Ensure the image stays sharp and clear above the blur */
 .lightbox-content {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  z-index: 2001;
+  z-index: 10000; /* Content must be higher than background */
 }
 
-.lightbox-content img {
-  max-width: 90%;
+.lightbox-img {
+  max-width: 90vw;
   max-height: 80vh;
+  object-fit: contain;
   border-radius: 8px;
-  /* Stronger shadow to pop against the blurred background */
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .nav-btn {
@@ -451,25 +501,154 @@ nav a:hover::after {
 }
 
 /* ============================================
-   CONTACT & FOOTER
+   LIGHTBOX LOADER
    ============================================ */
-.contact {
-  background: var(--primary-color);
-  color: var(--text-light);
-  text-align: center;
-  padding: 8rem 2rem;
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(255, 0, 136, 0.2);
+  border-radius: 50%;
+  display: inline-block;
+  position: absolute; /* Centered in the content box */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-top-color: var(--primary-color);
+  animation: rotation 1s linear infinite;
+  z-index: 10;
+  display: none; /* Hidden by default */
 }
 
+/* Show loader when image is loading */
+.lightbox.loading .loader {
+  display: block;
+}
+
+/* Hide image while loading to avoid "jumpy" reveals */
+.lightbox.loading #lightbox-img {
+  opacity: 0;
+}
+
+@keyframes rotation {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* ============================================
+   CONTACT SECTION STYLES
+   ============================================ */
+.contact-section {
+  padding: 16rem 16rem;
+  background-color: var(--background-light);
+  width: 100%;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.contact-info h2 {
+  color: var(--primary-color);
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.info-item {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.info-item .icon {
+  font-size: 1.5rem;
+  background: white;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px var(--card-shadow);
+}
+
+/* --- The Glass Form --- */
+.glass-card {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 4rem;
+  border-radius: 40px;
+  box-shadow: 0 20px 40px var(--card-shadow);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.contact-form input,
+.contact-form select,
+.contact-form textarea {
+  width: 100%;
+  padding: 1.6rem;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid transparent;
+  border-radius: 15px;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+
+  resize: none;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  background: white;
+  box-shadow: 0 0 15px var(--glow-color);
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 1.2rem;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 15px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  .contact-info h2 {
+    font-size: 2.5rem;
+  }
+}
+
+/* ============================================
+   GLASS FOOTER STYLES
+   ============================================ */
 footer {
   background: var(--background-dark);
   color: var(--text-light);
   text-align: center;
   padding: 3rem;
 }
-
-/* ============================================
-   GLASS FOOTER STYLES
-   ============================================ */
 .glass-footer {
   background: var(--background-dark);
   color: var(--text-light);
@@ -619,4 +798,55 @@ footer {
     font-size: 18px;
     display: none;
   } /* Hide nav buttons on mobile to prevent overlap */
+
+  .contact-section {
+    padding: 6rem 1.5rem; /* Reduce huge padding on small screens */
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr !important; /* Forces stacking */
+    gap: 3rem;
+  }
+
+  .glass-card {
+    padding: 2rem; /* Shrink internal padding so it fits on phones */
+    border-radius: 25px;
+  }
+
+  .contact-info h2 {
+    font-size: 2.2rem;
+    text-align: center;
+  }
+
+  .contact-info p {
+    text-align: center;
+  }
+
+  .info-item {
+    justify-content: center; /* Centers icons and text on mobile */
+  }
+}
+.cursor-follower {
+  width: 20px;
+  height: 20px;
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none; /* Crucial: allows clicking through the glow */
+  z-index: 9999;
+  opacity: 0.5;
+  filter: blur(10px);
+  /* Use a slight delay for a "trailing" liquid effect */
+  transition:
+    transform 0.15s ease-out,
+    opacity 0.3s ease;
+}
+
+/* Hide the custom cursor on mobile devices */
+@media (max-width: 768px) {
+  .cursor-follower {
+    display: none;
+  }
 }

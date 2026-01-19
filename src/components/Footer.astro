@@ -7,9 +7,10 @@
       </div>
 
       <div class="footer-socials">
-        <a href="#" aria-label="Facebook">FB</a>
-        <a href="#" aria-label="Instagram">IG</a>
-        <a href="#" aria-label="LinkedIn">IN</a>
+        <a
+          href="https://www.facebook.com/Paula-Palmer-Celebrant-704159899649642/"
+          aria-label="Facebook">FB</a
+        >
       </div>
     </div>
 
@@ -27,5 +28,32 @@
   const backToTop = document.getElementById("back-to-top");
   backToTop?.addEventListener("click", () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  const magneticElements = document.querySelectorAll(
+    ".footer-socials a, .back-to-top",
+  );
+
+  magneticElements.forEach((el) => {
+    el.addEventListener("mousemove", (e) => {
+      const { left, top, width, height } = el.getBoundingClientRect();
+
+      // Calculate the center of the element
+      const centerX = left + width / 2;
+      const centerY = top + height / 2;
+
+      // Calculate distance from center to mouse
+      // We divide by a factor (e.g., 2) so the movement is subtle
+      const moveX = (e.clientX - centerX) / 2;
+      const moveY = (e.clientY - centerY) / 2;
+
+      // Apply the pull
+      el.style.transform = `translate(${moveX}px, ${moveY}px)`;
+    });
+
+    // Reset position when mouse leaves
+    el.addEventListener("mouseleave", () => {
+      el.style.transform = `translate(0px, 0px)`;
+    });
   });
 </script>
