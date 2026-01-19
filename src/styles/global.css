@@ -542,7 +542,7 @@ nav a:hover::after {
    CONTACT SECTION STYLES
    ============================================ */
 .contact-section {
-  padding: 16rem 16rem;
+  padding: 8rem 4rem;
   background-color: var(--background-light);
   width: 100%;
 }
