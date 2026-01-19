@@ -7,17 +7,14 @@ interface Props {
 
 const { title } = Astro.props;
 import { ViewTransitions } from "astro:transitions";
-import { Analytics } from "@vercel/analytics/next";
+// 1. REMOVE the /next import
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="description"
-      content="Professional celebrant services for weddings, funerals, and special celebrations"
-    />
+    <meta name="description" content="Professional celebrant services..." />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -30,42 +27,42 @@ import { Analytics } from "@vercel/analytics/next";
     <ViewTransitions />
   </head>
   <body>
-    <Analytics />
     <div class="cursor-follower"></div>
     <slot />
   </body><script>
-    const follower = document.querySelector(".cursor-follower");
+    // 3. ADD Vercel Analytics initialization here
+    import { inject } from "@vercel/analytics";
+    inject();
+
+    // --- CURSOR FOLLOWER LOGIC ---
+    const follower = document.querySelector(".cursor-follower") as HTMLElement;
 
     window.addEventListener("mousemove", (e) => {
-      // Center the follower on the cursor
       const x = e.clientX - 10;
       const y = e.clientY - 10;
-
       follower.style.transform = `translate3d(${x}px, ${y}px, 0)`;
     });
 
-    // Interaction: Grow when hovering over links or buttons
     const interactives = document.querySelectorAll("a, button, .gallery-item");
-
     interactives.forEach((el) => {
       el.addEventListener("mouseenter", () => {
         follower.style.transform += " scale(3)";
         follower.style.opacity = "0.3";
         follower.style.filter = "blur(15px)";
       });
-
       el.addEventListener("mouseleave", () => {
         follower.style.opacity = "0.5";
         follower.style.filter = "blur(10px)";
       });
     });
 
-    // Hide cursor when it leaves the window
-    document.addEventListener("mouseleave", () => {
-      follower.style.opacity = "0";
-    });
-    document.addEventListener("mouseenter", () => {
-      follower.style.opacity = "0.5";
-    });
+    document.addEventListener(
+      "mouseleave",
+      () => (follower.style.opacity = "0"),
+    );
+    document.addEventListener(
+      "mouseenter",
+      () => (follower.style.opacity = "0.5"),
+    );
   </script>
 </html>
