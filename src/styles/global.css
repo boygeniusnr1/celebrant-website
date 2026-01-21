@@ -827,8 +827,8 @@ footer {
   }
 }
 .cursor-follower {
-  width: 20px;
-  height: 20px;
+  width: 150px;
+  height: 150px;
   background-color: var(--primary-color);
   border-radius: 50%;
   position: fixed;
@@ -837,10 +837,10 @@ footer {
   pointer-events: none; /* Crucial: allows clicking through the glow */
   z-index: 9999;
   opacity: 0.5;
-  filter: blur(10px);
+  filter: blur(120px);
   /* Use a slight delay for a "trailing" liquid effect */
   transition:
-    transform 0.15s ease-out,
+    transform 0.05s ease-out,
     opacity 0.3s ease;
 }
 

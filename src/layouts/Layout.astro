@@ -38,8 +38,8 @@ import { ViewTransitions } from "astro:transitions";
     const follower = document.querySelector(".cursor-follower") as HTMLElement;
 
     window.addEventListener("mousemove", (e) => {
-      const x = e.clientX - 10;
-      const y = e.clientY - 10;
+      const x = e.clientX - 75;
+      const y = e.clientY - 75;
       follower.style.transform = `translate3d(${x}px, ${y}px, 0)`;
     });
 
@@ -48,11 +48,11 @@ import { ViewTransitions } from "astro:transitions";
       el.addEventListener("mouseenter", () => {
         follower.style.transform += " scale(3)";
         follower.style.opacity = "0.3";
-        follower.style.filter = "blur(15px)";
+        follower.style.filter = "blur(140px)";
       });
       el.addEventListener("mouseleave", () => {
         follower.style.opacity = "0.5";
-        follower.style.filter = "blur(10px)";
+        follower.style.filter = "blur(120px)";
       });
     });
 
