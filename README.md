@@ -1,43 +1,56 @@
-# Astro Starter Kit: Minimal
+# 🌸 Paula Palmer | Celebrant Website
 
-```sh
-npm create astro@latest -- --template minimal
+A high-performance, accessible, and elegant website built for Paula Palmer, a professional celebrant. This site features a custom "Glass-morphism" design, an optimized photo gallery, and Vercel analytics.
+
+## 🚀 Tech Stack
+
+- **Framework:** [Astro](https://astro.build/)
+- **Deployment:** [Vercel](https://vercel.com)
+- **Styling:** Custom CSS (Modern Mesh Gradients & Glassmorphism)
+- **Forms:** [Web3Forms](https://web3forms.com/) (Serverless submission)
+- **Icons:** Lucide / SVG
+
+## 🛠️ Installation & Setup
+
+### 1. **Clone the repository:**
+
+```bash
+git clone https://github.com/boygeniusnr1/celebrant-website.git
+cd celebrant-website
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+### 2. **Install dependencies:**
 
-## 🚀 Project Structure
+    ```bash
+    pnpm install
+    ```
 
-Inside of your Astro project, you'll see the following folders and files:
+### 3. **Start the development server:**
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+    ```bash
+    pnpm run dev
+    ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## 📁 Project Structure
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+    ### /src/assets/ - High-resolution images and brand assets.
 
-Any static assets, like images, can be placed in the `public/` directory.
+    ### /src/components/ - Reusable UI components (Gallery, Contact Form, Header).
 
-## 🧞 Commands
+    ### /src/pages/ - Site routes (Home, Success).
 
-All commands are run from the root of the project, from a terminal:
+    ### /public/ - Static assets like the robots.txt and favicon.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+## 🔧 Features
 
-## 👀 Want to learn more?
+    ### Custom Lightbox: Optimized gallery with swipe gestures and loading states.
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+    ### Magnetic Interaction: Custom JS-driven cursor follower for a premium feel.
+
+    ### SEO Ready: Automated XML sitemap generation and robots.txt.
+
+    ### Responsive: Fluid design for mobile, tablet, and desktop.
+
+## 📝 Environment Variables
+
+To use the contact form, ensure you have your Web3Forms access key set in the Contact.astro component or via Vercel's environment variables.

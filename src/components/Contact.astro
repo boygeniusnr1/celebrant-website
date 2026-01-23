@@ -25,12 +25,26 @@
         </div>
       </div>
 
-      <form class="contact-form glass-card">
+      <form
+        class="contact-form glass-card"
+        action="https://api.web3forms.com/submit"
+        method="POST"
+      >
+        <input
+          type="hidden"
+          name="access_key"
+          value="7110ab1d-f8bd-42f2-8189-a967e13c1bb5"
+        />
+        <input
+          type="hidden"
+          name="redirect"
+          value="http://localhost:4321/success"
+        />
         <div class="form-group">
-          <input type="text" placeholder="Your Name" required />
+          <input type="text" placeholder="Your Name" required name="name" />
         </div>
         <div class="form-group">
-          <input type="email" placeholder="Your Email" required />
+          <input type="email" placeholder="Your Email" required name="email" />
         </div>
         <div class="form-group">
           <select required>
@@ -41,8 +55,11 @@
           </select>
         </div>
         <div class="form-group">
-          <textarea placeholder="Tell me about your event..." rows="5" required
-          ></textarea>
+          <textarea
+            placeholder="Tell me about your event..."
+            rows="5"
+            name="message"
+            required></textarea>
         </div>
         <button type="submit" class="submit-btn magnetic">Send Message</button>
       </form>

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Replace with your actual URL
+Sitemap: https://celebrant-website.vercel.app/sitemap-index.xml
