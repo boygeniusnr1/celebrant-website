@@ -1,4 +1,21 @@
-<section id="home" class="hero">
+---
+import { createReader } from "@keystatic/core/reader";
+import keystaticConfig from "../../keystatic.config";
+import fallbackHeroBackground from "../assets/hero-background.jpg";
+
+const reader = createReader(process.cwd(), keystaticConfig);
+let heroContent = null;
+
+try {
+  heroContent = await reader.singletons.hero.read();
+} catch (error) {
+  console.error("Could not read the Keystatic hero image; using the bundled image.", error);
+}
+
+const heroImage = heroContent?.backgroundImage || fallbackHeroBackground.src;
+---
+
+<section id="home" class="hero" style={`--hero-image: url("${heroImage}")`}>
   <h2>Celebrating Life's Most Important Moments</h2>
   <p>Creating meaningful ceremonies for weddings, farewells, and special celebrations</p>
 </section>

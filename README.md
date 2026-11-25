@@ -54,3 +54,15 @@ cd celebrant-website
 ## 📝 Environment Variables
 
 To use the contact form, ensure you have your Web3Forms access key set in the Contact.astro component or via Vercel's environment variables.
+
+## 🖼️ Image content
+
+The Keystatic admin is available at `/keystatic` while running the site locally.
+The Hero singleton and Gallery collection use explicit image-upload fields;
+uploaded images are stored under `public/images/` and their content metadata
+lives under `content/`. The current images are preloaded as editable CMS
+entries. If those entries are missing, the site falls back to its bundled
+images in `src/assets/`.
+
+Keystatic is configured with local storage, so edits are written to the
+repository on the machine running the development server.

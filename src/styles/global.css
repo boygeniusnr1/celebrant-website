@@ -83,7 +83,7 @@ header {
     0 0 15px rgba(255, 0, 136, 0.1);
 
   border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 
   -webkit-transform: translateZ(0);
   transform: translateZ(0); /* Forces the GPU to handle the blur calculation */
@@ -189,16 +189,16 @@ nav a:hover::after {
   width: 100%;
   display: flex;
   flex-direction: column;
+  gap: clamp(1rem, 2vw, 1.75rem);
   justify-content: center;
   align-items: center;
   text-align: center;
   color: var(--text-light);
-  /* Use the image directly on the section for better reliability */
   background:
     radial-gradient(at 0% 0%, rgba(255, 0, 136, 0.15) 0px, transparent 50%),
     radial-gradient(at 100% 100%, rgba(255, 0, 136, 0.1) 0px, transparent 50%),
     linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3)),
-    url("../assets/hero-background.jpg");
+    var(--hero-image, url("../assets/hero-background.jpg"));
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -206,13 +206,18 @@ nav a:hover::after {
 }
 
 .hero h2 {
-  /* Enormous, bold text */
-  font-size: clamp(3.5rem, 12vw, 6rem);
-  font-weight: 800;
-  line-height: 1.1;
+  font-family: "Geist Variable", "Geist", sans-serif;
+  font-size: clamp(3.75rem, 8vw, 6rem);
+  font-weight: 600;
+  line-height: 1.05;
   text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  max-width: 1000px;
+  max-width: 1100px;
   padding: 0 2rem;
+  z-index: 2;
+}
+
+.hero p {
+  position: relative;
   z-index: 2;
 }
 
@@ -223,7 +228,7 @@ nav a:hover::after {
     height: 70vh; /* Shorter hero on mobile feels better */
   }
   .hero h2 {
-    font-size: clamp(2.5rem, 15vw, 4rem);
+    font-size: clamp(3rem, 13vw, 4rem);
   }
 }
 
@@ -263,7 +268,7 @@ nav a:hover::after {
   padding: 2.5rem;
   border-radius: 15px;
   box-shadow: 0 4px 6px var(--card-shadow);
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   border: 1px solid transparent;
 }
 
@@ -378,7 +383,7 @@ nav a:hover::after {
   /* Separate transitions for Reveal (slow) and Hover (fast) */
   transition:
     opacity 0.6s ease-out,
-    transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
     box-shadow 0.3s ease;
 }
 

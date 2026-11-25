@@ -1,7 +1,6 @@
 ---
-import { Image } from "astro:assets";
-
-// Import local images from your src/assets folder
+import { createReader } from "@keystatic/core/reader";
+import keystaticConfig from "../../keystatic.config";
 import wedding1 from "../assets/images/wedding1.jpg";
 import celebration from "../assets/images/celebration.jpg";
 import wedding2 from "../assets/images/wedding2.jpg";
@@ -9,14 +8,32 @@ import memorial from "../assets/images/memorial.jpg";
 import birthday from "../assets/images/birthday.jpg";
 import wedding3 from "../assets/images/wedding3.jpg";
 
-const images = [
-  { src: wedding1, alt: "Wedding 1" },
-  { src: celebration, alt: "Celebration" },
-  { src: wedding2, alt: "Wedding 2" },
-  { src: memorial, alt: "Memorial Service" },
-  { src: birthday, alt: "Birthday Ceremony" },
-  { src: wedding3, alt: "Wedding 3" },
+const fallbackImages = [
+  { src: wedding1.src, alt: "Wedding 1" },
+  { src: celebration.src, alt: "Celebration" },
+  { src: wedding2.src, alt: "Wedding 2" },
+  { src: memorial.src, alt: "Memorial Service" },
+  { src: birthday.src, alt: "Birthday Ceremony" },
+  { src: wedding3.src, alt: "Wedding 3" },
 ];
+
+const reader = createReader(process.cwd(), keystaticConfig);
+let cmsImages = [];
+
+try {
+  cmsImages = (await reader.collections.gallery.all())
+    .map(({ entry }) => ({
+      src: entry.image,
+      alt: entry.alt,
+      order: entry.order,
+    }))
+    .filter((image) => image.src)
+    .sort((a, b) => a.order - b.order);
+} catch (error) {
+  console.error("Could not read Keystatic gallery images; using bundled images.", error);
+}
+
+const images = cmsImages.length ? cmsImages : fallbackImages;
 ---
 
 <section id="gallery" class="gallery">
@@ -28,14 +45,14 @@ const images = [
           <div
             class={`gallery-item ${index >= 6 ? "hidden-item" : ""}`}
             data-index={index}
-            data-full={image.src.src}
+            data-full={image.src}
           >
-            <Image
+            <img
               src={image.src}
               alt={image.alt}
               width={600}
               height={450}
-              format="webp"
+              loading="lazy"
             />
           </div>
         ))
@@ -59,7 +76,7 @@ const images = [
     <div class="lightbox-content">
       <div id="lightbox-loader" class="loader"></div>
 
-      <img id="lightbox-img" src="" alt="" />
+      <img id="lightbox-img" src={images[0].src} alt={images[0].alt} />
       <div class="image-counter">
         <span id="current-image">1</span> / <span id="total-images"
           >{images.length}</span

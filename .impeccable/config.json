@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "geist",
+        "createdAt": "2026-11-25T06:07:50.283Z",
+        "reason": "User explicitly requested Geist for the Hero heading"
+      }
+    ]
+  }
+}
